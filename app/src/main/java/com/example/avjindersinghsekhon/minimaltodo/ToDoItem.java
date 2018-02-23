@@ -16,6 +16,7 @@ public class ToDoItem implements Serializable{
     private String mToDoDescription;
     private PriorityType mPriority;
     private boolean mHasReminder;
+    private boolean mIsCompleted;
 //    private Date mLastEdited;
     private int mTodoColor;
     private Date mToDoDate;
@@ -30,11 +31,12 @@ public class ToDoItem implements Serializable{
     private static final String TODOIDENTIFIER = "todoidentifier";
 
 
-    public ToDoItem(String todoBody, String todoDescription, PriorityType priority, boolean hasReminder, Date toDoDate){
+    public ToDoItem(String todoBody, String todoDescription, PriorityType priority, boolean hasReminder, boolean isCompleted, Date toDoDate){
         mToDoText = todoBody;
         mToDoDescription = todoDescription;
         mPriority = priority;
         mHasReminder = hasReminder;
+        mIsCompleted = isCompleted;
         mToDoDate = toDoDate;
         mTodoColor = 1677725;
         mTodoIdentifier = UUID.randomUUID();
@@ -93,6 +95,14 @@ public class ToDoItem implements Serializable{
 
     public void setToDoDescription(String mToDoDescription) {
         this.mToDoDescription = mToDoDescription;
+    }
+
+    public boolean getIsCompleted() {
+        return mIsCompleted;
+    }
+
+    public void setIsCompleted(boolean mIsCompleted){
+        this.mIsCompleted = mIsCompleted;
     }
 
     public boolean hasReminder() {

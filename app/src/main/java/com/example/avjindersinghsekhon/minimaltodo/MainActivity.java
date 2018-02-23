@@ -227,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 app.send(this, "Action", "FAB pressed");
                 Intent newTodo = new Intent(MainActivity.this, AddToDoActivity.class);
-                ToDoItem item = new ToDoItem("", "", ToDoItem.PriorityType.LOW, false, null);
+                ToDoItem item = new ToDoItem("", "", ToDoItem.PriorityType.LOW,false, false, null);
                 int color = ColorGenerator.MATERIAL.getRandomColor();
                 item.setTodoColor(color);
                 //noinspection ResourceType
@@ -317,10 +317,15 @@ public class MainActivity extends AppCompatActivity {
         itemTouchHelperClass = new ItemTouchHelperClass(new SwipeControllerActions() {
             @Override
             public void onRightClicked(int position) {
-                //TODO: Double check remove
                 adapter.items.remove(position);
                 adapter.notifyItemRemoved(position);
                 adapter.notifyItemRangeChanged(position, adapter.getItemCount());
+            }
+
+            @Override
+            public void onLeftClicked(int position){
+                //TODO: Hide item from list
+                adapter.items.get(position).setIsCompleted(true);
             }
         });
 

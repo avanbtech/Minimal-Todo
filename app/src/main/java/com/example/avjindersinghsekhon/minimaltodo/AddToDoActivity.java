@@ -619,7 +619,7 @@ public class AddToDoActivity extends AppCompatActivity implements  DatePickerDia
             mUserToDoItem.setToDoDescription(capitalizedString);
         }
         else{
-            mUserToDoItem.setToDoText(mUserEnteredDescription);
+            mUserToDoItem.setToDoDescription(mUserEnteredDescription);
         }
 
 //        mUserToDoItem.setLastEdited(mLastEdited);
