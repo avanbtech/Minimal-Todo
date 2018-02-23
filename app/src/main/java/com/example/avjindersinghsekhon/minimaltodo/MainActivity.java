@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String FILENAME = "todoitems.json";
     private StoreRetrieveData storeRetrieveData;
     public ItemTouchHelper itemTouchHelper;
+    private ItemTouchHelperClass itemTouchHelperClass;
     private CustomRecyclerScrollViewListener customRecyclerScrollViewListener;
     public static final String SHARED_PREF_DATA_SET_CHANGED = "com.avjindersekhon.datasetchanged";
     public static final String CHANGE_OCCURED = "com.avjinder.changeoccured";
@@ -288,16 +290,14 @@ public class MainActivity extends AppCompatActivity {
         };
         mRecyclerView.addOnScrollListener(customRecyclerScrollViewListener);
 
+//        ItemTouchHelper.Callback callback = new ItemTouchHelperClass(adapter);
+//        itemTouchHelper = new ItemTouchHelper(callback);
+//        itemTouchHelper.attachToRecyclerView(mRecyclerView);
 
-        ItemTouchHelper.Callback callback = new ItemTouchHelperClass(adapter);
-        itemTouchHelper = new ItemTouchHelper(callback);
-        itemTouchHelper.attachToRecyclerView(mRecyclerView);
-
-
-        mRecyclerView.setAdapter(adapter);
+//        mRecyclerView.setAdapter(adapter);
 //        setUpTransitions();
 
-
+        setupRecyclerView();
 
     }
 
@@ -306,6 +306,33 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(THEME_SAVED, theme);
         editor.apply();
+    }
+
+    private void setupRecyclerView() {
+        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.toDoRecyclerView);
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mRecyclerView.setAdapter(adapter);
+
+        itemTouchHelperClass = new ItemTouchHelperClass(new SwipeControllerActions() {
+            @Override
+            public void onRightClicked(int position) {
+                //TODO: Double check remove
+                adapter.items.remove(position);
+                adapter.notifyItemRemoved(position);
+                adapter.notifyItemRangeChanged(position, adapter.getItemCount());
+            }
+        });
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(itemTouchHelperClass);
+        itemTouchhelper.attachToRecyclerView(recyclerView);
+
+        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+                itemTouchHelperClass.onDraw(c);
+            }
+        });
     }
 
     @Override
